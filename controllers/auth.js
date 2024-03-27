@@ -1,5 +1,4 @@
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
@@ -23,16 +22,8 @@ const login = async (req, res) => {
   if (!comparePassword) {
     throw new BadRequestError("wrong password");
   }
-  const dataToBeSigned = {
-    name: user.name,
-    email: user.email,
-    id: user._id,
-  };
-  const token = jwt.sign(dataToBeSigned, process.env.JWT_SECRET, {
-    expiresIn: "5d",
-  });
 
-  // const tempUser =
+  const token = await user.generateToken();
 
   res
     .status(200)
