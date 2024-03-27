@@ -7,8 +7,9 @@ const {
   getSingleJob,
   updateJob,
 } = require("../controllers/jobs");
+const authenticationMiddleware = require("../middleware/authentication");
 
-router.get("/", getAllJobs);
+router.get("/", authenticationMiddleware, getAllJobs);
 router.get("/:id", getSingleJob);
 router.post("/", addJob);
 router.patch("/:id", updateJob);
