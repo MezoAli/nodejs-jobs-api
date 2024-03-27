@@ -1,6 +1,4 @@
 const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-require("dotenv").config();
 
 const { BadRequestError } = require("../errors");
 const register = async (req, res) => {
@@ -18,12 +16,12 @@ const login = async (req, res) => {
   if (!user) {
     throw new BadRequestError("email is not found, please register first");
   }
-  const comparePassword = await bcrypt.compare(password, user.password);
-  if (!comparePassword) {
+  const result = await user.comparePassword(password);
+  if (!result) {
     throw new BadRequestError("wrong password");
   }
 
-  const token = await user.generateToken();
+  const token = user.generateToken();
 
   res
     .status(200)
