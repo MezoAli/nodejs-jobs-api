@@ -9,18 +9,48 @@ const getAllJobs = async (req, res) => {
 
 const getSingleJob = async (req, res) => {
   const id = req.params.id;
-  const job = await Job.findById(id).populate("createdBy");
+  const job = await Job.findOne({
+    _id: id,
+    createdBy: req.user.id,
+  }).populate("createdBy");
   if (!job) {
     throw new NotFoundError("no job with that id");
   }
   res.status(200).json({ success: true, job });
 };
+
 const updateJob = async (req, res) => {
-  res.status(201).json({ success: true, msg: "update job" });
+  const id = req.params.id;
+  const data = req.body;
+  const userId = req.user.id;
+  const job = await Job.findOneAndUpdate(
+    {
+      _id: id,
+      createdBy: userId,
+    },
+    data,
+    { new: true, runValidators: true }
+  );
+  if (!job) {
+    throw new NotFoundError("no job with that id");
+  }
+  res.status(201).json({ success: true, job, msg: "job updated Successfully" });
 };
+
 const deleteJob = async (req, res) => {
-  res.status(200).json({ success: true, msg: "delete job" });
+  const id = req.params.id;
+  const userId = req.user.id;
+  const job = await Job.findOneAndDelete({
+    _id: id,
+    createdBy: userId,
+  });
+
+  if (!job) {
+    throw new NotFoundError("no job with that id");
+  }
+  res.status(201).json({ success: true, msg: "Job deleted successfully" });
 };
+
 const addJob = async (req, res) => {
   const userId = req.user.id;
   const data = { ...req.body, createdBy: userId };
