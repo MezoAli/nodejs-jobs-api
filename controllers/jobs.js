@@ -2,7 +2,9 @@ const getAllJobs = async (req, res) => {
   res.status(200).json({ success: true, msg: "get all jobs" });
 };
 const getSingleJob = async (req, res) => {
-  res.status(200).json({ success: true, msg: "get single job" });
+  res
+    .status(200)
+    .json({ success: true, msg: "get single job", user: req.user });
 };
 const updateJob = async (req, res) => {
   res.status(201).json({ success: true, msg: "update job" });

@@ -3,6 +3,7 @@ require("express-async-errors");
 const connectDB = require("./db/connect");
 const jobsRouter = require("./routes/jobs");
 const authRouter = require("./routes/auth");
+const authMiddleware = require("./middleware/authentication");
 const express = require("express");
 const app = express();
 
@@ -12,8 +13,8 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 app.use(express.json());
 
-app.use("/api/v1/jobs", jobsRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/jobs", authMiddleware, jobsRouter);
 
 // extra packages
 

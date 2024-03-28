@@ -1,10 +1,10 @@
 const { UnauthenticatedError } = require("../errors");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const authenticationMiddleware = (req, res, next) => {
+const authenticationMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
   const [_, token] = authorization.split(" ");
-  if (!authorization.startsWith("bearer") || !token) {
+  if (!authorization.startsWith("Bearer") || !token) {
     throw new UnauthenticatedError("invalid token");
   }
 
