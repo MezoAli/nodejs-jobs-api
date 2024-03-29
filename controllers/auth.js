@@ -2,7 +2,10 @@ const User = require("../models/User");
 
 const { BadRequestError, UnauthenticatedError } = require("../errors");
 const register = async (req, res) => {
-  const { password } = req.body;
+  const { password, name, email } = req.body;
+  if (!password || !name || !email) {
+    throw new BadRequestError("invalid credentilas");
+  }
   if (password.length < 6) {
     throw new BadRequestError("password should be atleast 6 characters");
   }
